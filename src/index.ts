@@ -28,10 +28,8 @@ class Uint32ArrayBigEndian {
     }
 }
 
-export default class {
-    static BLOCK_LENGTH = 64;
-
-    hash(data: Uint8Array) {
+export const  BLOCK_LENGTH = 64;
+export function hash(data: Uint8Array) {
         var h0 = 0x67452301,
             h1 = 0xEFCDAB89,
             h2 = 0x98BADCFE,
@@ -106,4 +104,3 @@ export default class {
                 return result;
             }, []));
     }
-}
