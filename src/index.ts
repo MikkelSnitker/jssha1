@@ -26,7 +26,7 @@ class Uint32ArrayBigEndian {
         this.bytes[index + 2] = (rest >> 8) & 0xFF;
         this.bytes[index + 3] = rest & 0xFF;
     }
-}
+} 
 
 export const  BLOCK_LENGTH = 64;
 export function hash(data: Uint8Array) {
