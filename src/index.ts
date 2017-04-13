@@ -29,14 +29,14 @@ class Uint32ArrayBigEndian {
 } 
 
 export const  BLOCK_LENGTH = 64;
-export function hash(data: Uint8Array) {
+export function hash(source: Uint8Array) {
         var h0 = 0x67452301,
             h1 = 0xEFCDAB89,
             h2 = 0x98BADCFE,
             h3 = 0x10325476,
             h4 = 0xC3D2E1F0,
             i: number,
-            sbytes = data.byteLength,
+            sbytes = source.byteLength,
             sbits = sbytes << 3,
             minbits = sbits + 65,
             bits = Math.ceil(minbits / 512) << 9,
@@ -46,19 +46,23 @@ export function hash(data: Uint8Array) {
             s8 = s.bytes,
             j: number,
             w = new Uint32Array(80),
-            sourceArray = new Uint8Array(data);
-        for (i = 0; i < sbytes; ++i) {
+            sourceArray = new Uint8Array(source);
+        for (i = 0; i < sbytes; ++i)
+        {
             s8[i] = sourceArray[i];
         }
         s8[sbytes] = 0x80;
         s.set(slen - 2, Math.floor(sbits / POW_2_32));
         s.set(slen - 1, sbits & 0xFFFFFFFF);
-        for (i = 0; i < slen; i += 16) {
-            for (j = 0; j < 16; ++j) {
+        for (i = 0; i < slen; i += 16)
+        {
+            for (j = 0; j < 16; ++j)
+            {
                 w[j] = s.get(i + j);
             }
-            for (; j < 80; ++j) {
-
+            for ( ; j < 80; ++j)
+            {
+               
                 w[j] = lrot(w[j - 3] ^ w[j - 8] ^ w[j - 14] ^ w[j - 16], 1);
             }
             var a = h0,
@@ -69,20 +73,25 @@ export function hash(data: Uint8Array) {
                 f: number,
                 k: number,
                 temp: number;
-            for (j = 0; j < 80; ++j) {
-                if (j < 20) {
+            for (j = 0; j < 80; ++j)
+            {
+                if (j < 20)
+                {
                     f = (b & c) | ((~b) & d);
                     k = 0x5A827999;
                 }
-                else if (j < 40) {
+                else if (j < 40)
+                {
                     f = b ^ c ^ d;
                     k = 0x6ED9EBA1;
                 }
-                else if (j < 60) {
+                else if (j < 60)
+                {
                     f = (b & c) ^ (b & d) ^ (c & d);
                     k = 0x8F1BBCDC;
                 }
-                else {
+                else
+                {
                     f = b ^ c ^ d;
                     k = 0xCA62C1D6;
                 }
@@ -94,8 +103,13 @@ export function hash(data: Uint8Array) {
                 b = a;
                 a = temp;
             }
+            h0 = (h0 + a);
+            h1 = (h1 + b);
+            h2 = (h2 + c);
+            h3 = (h3 + d);
+            h4 = (h4 + e);
         }
-        return new Uint8Array([(h0 + a), (h1 + b), (h2 + c), (h3 + d), (h4 + e)].reduce(
+        var ret = new Uint8Array([h0, h1, h2, h3, h4].reduce(
             (result, int32, index) => {
                 result.push((int32 >>> 8 * 3) & 0xff);
                 result.push((int32 >>> 8 * 2) & 0xff);
@@ -103,4 +117,5 @@ export function hash(data: Uint8Array) {
                 result.push((int32 >>> 8 * 0) & 0xff);
                 return result;
             }, []));
+        return ret;
     }
