@@ -1,0 +1,11 @@
+{
+  "name": "jssha1",
+  "version": "1.0.0",
+  "description": "SHA1 Javascript implementation",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mikkel Snitker <mikkel@snitker.com>",
+  "license": "ISC"
+}
